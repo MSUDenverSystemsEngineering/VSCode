@@ -88,7 +88,7 @@ Try {
 	#[hashtable]$deployAppScriptParameters = $psBoundParameters
 
 	## Variables: Environment
-	If (Test-Path -LiteralPath 'variable:HostInvocation') { $InvocationInfo = $HostInvocation } Else { $InvocationInfo = $MyInvocation }
+	If (Test-Path -LiteralPath 'variable:HostInvocation') { $InvocationInfo = $HostInvocation }
 	[string]$scriptDirectory = Split-Path -Path $InvocationInfo.MyCommand.Definition -Parent
 
 	## Dot source the required App Deploy Toolkit Functions
@@ -245,8 +245,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU1Zrwkzg2fXYUY0KVuyAkZN0U
-# tm6gghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUzP8jIjghc8D2wapsKdF4Pxsd
+# 1HGgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -346,13 +346,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFB6ihA8vtTKsrtxbM19LX9J6yHtBMA0GCSqGSIb3DQEBAQUABIIBgJDhGoct
-# MyGsKyj+0nsn2AUGoCEuATU7D0SnwRbgXsgDcRFg0MuFv0+NyqSJnZECS60lyDfa
-# Ai2C9lr6w/WBKSMZohNo/xrGXFe08nkejwpzSx2qjp9Iv1zN6P5tyLEf3s77366P
-# FXljmazW5aV3vTmWB78u+jVYXLd8QlEI+GVflX32qED4l7L8RiufMOHLv6Tr385C
-# BwGh7VW32QXAqoNTyFazzu31+De++zm5ui95OdPW20tNviJ2BI2obeqQ7P0ApsbS
-# 8cK6XkV7+LL7AIlA3VBodDX5lsJJ11yxFlGeZ7vj0Wb+7YKIopbfKm7SDSwru1vU
-# AWMj2yTJhsevDm9nua8A4f59J4EE4iiiiVsH+Oy7n+3vjbq81GQaECQVxbfMO5Ji
-# n2nTEUw0QCgOSxzpaktt1cyk39aEObidlUmD5kS4587+FcmfHywMnV8wCZrP4290
-# 3xynHSx5pXLCzc72wWLfCCQhnNZ4YRwPFwgAF4nDCzLXIykQSnZZXhay3Q==
+# MRYEFINCtkKID3x20rbQ5bnikuOvFh0mMA0GCSqGSIb3DQEBAQUABIIBgKI8GZFM
+# 1J9kd5qQj+WniHjZXhVaP/yoFWjFjr4mTZUoFvv7asygTgB5O0owvMWWcTn45asP
+# 6zuXqpuugDdigFCDjxRu1DLkh7nhV9oGEef2Lepm09xazsTq0rQXZjo8LRqbv4q0
+# 7RU1jY+xa79EjQchZ80hQWFpzkQETkA6naF6wC+AKH9tEJY+9b6OJq78et4CDhyh
+# PXT5TGjeN/8SX1UQ6KLNKnDCcR+GxUW62QsKsr156K5QvZZipliIlYCYh8tLeEu/
+# EMnbmFWS+Ei0VxWpBTzS5v/g3EUom8VbN1lY/6JM9HruvTVAIeDLM4d9KH5pAlWG
+# RoNF2W0bAyCajLpAWhl+znXa+T0nWEjXzATE26CgWE26CYnJKxv/sXDlFec6XKmL
+# WShqCARS8b5ICb4FVCVjtH4cI+hx//3y8cjRGmtD1NEfqdBOLppS3YJ3gB4AajZU
+# wmdI/iYTsiZZWxJhRZntWbcPMRej1o4P1LzgaC9Plkvijia3Q5jUhagiPA==
 # SIG # End signature block

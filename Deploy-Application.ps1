@@ -55,25 +55,25 @@ Param (
 
 Try {
 	## Set the script execution policy for this process
-	Try { Set-ExecutionPolicy -ExecutionPolicy 'ByPass' -Scope 'Process' -Force -ErrorAction 'Stop' } Catch {}
+	#Try { Set-ExecutionPolicy -ExecutionPolicy 'ByPass' -Scope 'Process' -Force -ErrorAction 'Stop' } Catch {}
 
 	##*===============================================
 	##* VARIABLE DECLARATION
 	##*===============================================
 	## Variables: Application
-	[string]$appVendor = 'Microsoft'
-	[string]$appName = 'Visual Studio Code'
-	[string]$appVersion = '1.63.2'
-	[string]$appArch = ''
-	[string]$appLang = 'EN'
-	[string]$appRevision = '01'
-	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '01/27/2022'
-	[string]$appScriptAuthor = 'Craig Myers'
+	#[string]$appVendor = 'Microsoft'
+	#[string]$appName = 'Visual Studio Code'
+	#[string]$appVersion = '1.63.2'
+	#[string]$appArch = ''
+	#[string]$appLang = 'EN'
+	#[string]$appRevision = '01'
+	#[string]$appScriptVersion = '1.0.0'
+	#[string]$appScriptDate = '01/27/2022'
+	#[string]$appScriptAuthor = 'Craig Myers'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
-	[string]$installName = ''
-	[string]$installTitle = ''
+	#[string]$installName = ''
+	#[string]$installTitle = ''
 
 	##* Do not modify section below
 	#region DoNotModify
@@ -83,9 +83,9 @@ Try {
 
 	## Variables: Script
 	[string]$deployAppScriptFriendlyName = 'Deploy Application'
-	[version]$deployAppScriptVersion = [version]'3.8.4'
-	[string]$deployAppScriptDate = '26/01/2021'
-	[hashtable]$deployAppScriptParameters = $psBoundParameters
+	#[version]$deployAppScriptVersion = [version]'3.8.4'
+	#[string]$deployAppScriptDate = '26/01/2021'
+	#[hashtable]$deployAppScriptParameters = $psBoundParameters
 
 	## Variables: Environment
 	If (Test-Path -LiteralPath 'variable:HostInvocation') { $InvocationInfo = $HostInvocation } Else { $InvocationInfo = $MyInvocation }
@@ -245,8 +245,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUKTRAqm2vSKAQRp+xSJs2ZXXM
-# fo6gghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU1Zrwkzg2fXYUY0KVuyAkZN0U
+# tm6gghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -346,13 +346,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFIAedRiCFf72v5gGA7dKQfpJ0giEMA0GCSqGSIb3DQEBAQUABIIBgEtQKEeU
-# Xud71xzwJAByCoZrCFI8eko6e/NeRodZH+5t+KWuU8pzhuA7p1qFqC+b7g6QpBeU
-# 7KHG2IyTQeIVpdefyv8VE8FR2+Q1xtI9OAnHFVSZ1OSGBdHL9+Zdi7OPEOleSzSR
-# uvXnjchjlyKkqUintcyG9ADxPZg5XyNuQt2CqlybX3SwxPj4TM3UMSiCUmlY662y
-# AJTjMCchj92loaE1Qz8c87iy+ATUOyIr+vJ9ojcE0Qr5kj7fKyxC1TDJv2IXfG7o
-# QNSYQ/yf0Eun6YCzMJMecAvCRs1YF1jttedEpo9PPXjdjR2zsLTkgqQolD4bvyj6
-# OHUKHIZyLrJFTk6XqsLeZk7CNxWfO2gbdNVOU6S5heAdMA44ksh0iNYw4E3V7wM4
-# Fxb03biA1qtOKGfb1hAwmy0lidmCdpfHfnLM6F9abmyRgb4Olsp2vARy1rF0Yxav
-# YjTtYRiGCGLNjSAmmeiKaSgUGV+nLcALa13bPnSzFvBTmZUYH3us/IKmwQ==
+# MRYEFB6ihA8vtTKsrtxbM19LX9J6yHtBMA0GCSqGSIb3DQEBAQUABIIBgJDhGoct
+# MyGsKyj+0nsn2AUGoCEuATU7D0SnwRbgXsgDcRFg0MuFv0+NyqSJnZECS60lyDfa
+# Ai2C9lr6w/WBKSMZohNo/xrGXFe08nkejwpzSx2qjp9Iv1zN6P5tyLEf3s77366P
+# FXljmazW5aV3vTmWB78u+jVYXLd8QlEI+GVflX32qED4l7L8RiufMOHLv6Tr385C
+# BwGh7VW32QXAqoNTyFazzu31+De++zm5ui95OdPW20tNviJ2BI2obeqQ7P0ApsbS
+# 8cK6XkV7+LL7AIlA3VBodDX5lsJJ11yxFlGeZ7vj0Wb+7YKIopbfKm7SDSwru1vU
+# AWMj2yTJhsevDm9nua8A4f59J4EE4iiiiVsH+Oy7n+3vjbq81GQaECQVxbfMO5Ji
+# n2nTEUw0QCgOSxzpaktt1cyk39aEObidlUmD5kS4587+FcmfHywMnV8wCZrP4290
+# 3xynHSx5pXLCzc72wWLfCCQhnNZ4YRwPFwgAF4nDCzLXIykQSnZZXhay3Q==
 # SIG # End signature block

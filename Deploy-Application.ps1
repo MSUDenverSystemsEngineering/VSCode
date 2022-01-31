@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 	This script performs the installation or uninstallation of an application(s).
 	# LICENSE #
@@ -37,6 +37,10 @@
 .LINK
 	http://psappdeploytoolkit.com
 #>
+
+## Suppress PSScriptAnalyzer errors for not using declared variables during AppVeyor build
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification="Suppress AppVeyor errors on unused variables below")]
+
 [CmdletBinding()]
 Param (
 	[Parameter(Mandatory=$false)]
@@ -55,25 +59,25 @@ Param (
 
 Try {
 	## Set the script execution policy for this process
-	#Try { Set-ExecutionPolicy -ExecutionPolicy 'ByPass' -Scope 'Process' -Force -ErrorAction 'Stop' } Catch {}
+	Try { Set-ExecutionPolicy -ExecutionPolicy 'ByPass' -Scope 'Process' -Force -ErrorAction 'Stop' } Catch { Write-Error "Failed to set the execution policy to Bypass for this process." }
 
 	##*===============================================
 	##* VARIABLE DECLARATION
 	##*===============================================
 	## Variables: Application
-	#[string]$appVendor = 'Microsoft'
-	#[string]$appName = 'Visual Studio Code'
-	#[string]$appVersion = '1.63.2'
-	#[string]$appArch = ''
-	#[string]$appLang = 'EN'
-	#[string]$appRevision = '01'
-	#[string]$appScriptVersion = '1.0.0'
-	#[string]$appScriptDate = '01/27/2022'
-	#[string]$appScriptAuthor = 'Craig Myers'
+	[string]$appVendor = 'Microsoft'
+	[string]$appName = 'Visual Studio Code'
+	[string]$appVersion = '1.63.2'
+	[string]$appArch = 'x64'
+	[string]$appLang = 'EN'
+	[string]$appRevision = '01'
+	[string]$appScriptVersion = '1.0.0'
+	[string]$appScriptDate = '01/31/2022'
+	[string]$appScriptAuthor = 'Craig Myers'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
-	#[string]$installName = ''
-	#[string]$installTitle = ''
+	[string]$installName = ''
+	[string]$installTitle = ''
 
 	##* Do not modify section below
 	#region DoNotModify
@@ -83,12 +87,12 @@ Try {
 
 	## Variables: Script
 	[string]$deployAppScriptFriendlyName = 'Deploy Application'
-	#[version]$deployAppScriptVersion = [version]'3.8.4'
-	#[string]$deployAppScriptDate = '26/01/2021'
-	#[hashtable]$deployAppScriptParameters = $psBoundParameters
+	[version]$deployAppScriptVersion = [version]'3.8.3'
+	[string]$deployAppScriptDate = '30/09/2020'
+	[hashtable]$deployAppScriptParameters = $psBoundParameters
 
 	## Variables: Environment
-	If (Test-Path -LiteralPath 'variable:HostInvocation') { $InvocationInfo = $HostInvocation }
+	If (Test-Path -LiteralPath 'variable:HostInvocation') { $InvocationInfo = $HostInvocation } Else { $InvocationInfo = $MyInvocation }
 	[string]$scriptDirectory = Split-Path -Path $InvocationInfo.MyCommand.Definition -Parent
 
 	## Dot source the required App Deploy Toolkit Functions
@@ -116,17 +120,19 @@ Try {
 		##*===============================================
 		[string]$installPhase = 'Pre-Installation'
 
-		## Show Welcome Message, close Internet Explorer if required, allow up to 3 deferrals, verify there is enough disk space to complete the install, and persist the prompt
-		Show-InstallationWelcome -CloseApps 'Code' -AllowDefer -DeferTimes 3 -CheckDiskSpace -PersistPrompt
+		## Show Welcome Message, close Internet Explorer if required, verify there is enough disk space to complete the install, and persist the prompt
+		Show-InstallationWelcome -CloseApps 'jamovi' -CheckDiskSpace -PersistPrompt
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
 		IF (Test-Path -Path "$envProgramFiles\Microsoft VS Code\unins000.exe"){
-			$exitCode = Execute-Process -Path "$envProgramFiles\Microsoft VS Code\unins000.exe" -Parameters '/S' -WindowStyle 'Hidden'
+			$exitCode = Execute-Process -Path "$envProgramFiles\Microsoft VS Code\unins000.exe" -Parameters '/VERYSILENT' -WindowStyle 'Hidden'
 			If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 		}
+
+
 
 		##*===============================================
 		##* INSTALLATION
@@ -140,9 +146,8 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		$exitCode = Execute-Process -Path "$dirFiles\VSCodeSetup-x64-1.63.2.exe" -Parameters '/S' -WindowStyle 'Hidden'
+		$exitCode = Execute-Process -Path "$dirFiles\VSCodeSetup-x64-1.63.2.exe" -Parameters '/VERYSILENT /MERGETASKS=!runcode' -WindowStyle 'Hidden'
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
-
 		##*===============================================
 		##* POST-INSTALLATION
 		##*===============================================
@@ -151,7 +156,7 @@ Try {
 		## <Perform Post-Installation tasks here>
 
 		## Display a message at the end of the install
-		If (-not $useDefaultMsi) { Show-InstallationPrompt -Message 'You can customize text to appear at the end of an install or remove it completely for unattended installations.' -ButtonRightText 'OK' -Icon Information -NoWait }
+		If (-not $useDefaultMsi) {}
 	}
 	ElseIf ($deploymentType -ieq 'Uninstall')
 	{
@@ -161,7 +166,7 @@ Try {
 		[string]$installPhase = 'Pre-Uninstallation'
 
 		## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
-		Show-InstallationWelcome -CloseApps 'Code' -CloseAppsCountdown 60
+		Show-InstallationWelcome -CloseApps 'code' -CloseAppsCountdown 60
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
@@ -181,9 +186,8 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		$exitCode = Execute-Process -Path "$envProgramFiles\Microsoft VS Code\unins000.exe" -Parameters '/S' -WindowStyle 'Hidden'
+		$exitCode = Execute-Process -Path "$envProgramFiles\Microsoft VS Code\unins000.exe" -Parameters '/VERYSILENT' -WindowStyle 'Hidden'
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
-
 		##*===============================================
 		##* POST-UNINSTALLATION
 		##*===============================================
@@ -241,12 +245,11 @@ Catch {
 	Exit-Script -ExitCode $mainExitCode
 }
 
-
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUzP8jIjghc8D2wapsKdF4Pxsd
-# 1HGgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUuRxDfpk/RqYD8j64NIYahULr
+# kEygghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -346,13 +349,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFINCtkKID3x20rbQ5bnikuOvFh0mMA0GCSqGSIb3DQEBAQUABIIBgKI8GZFM
-# 1J9kd5qQj+WniHjZXhVaP/yoFWjFjr4mTZUoFvv7asygTgB5O0owvMWWcTn45asP
-# 6zuXqpuugDdigFCDjxRu1DLkh7nhV9oGEef2Lepm09xazsTq0rQXZjo8LRqbv4q0
-# 7RU1jY+xa79EjQchZ80hQWFpzkQETkA6naF6wC+AKH9tEJY+9b6OJq78et4CDhyh
-# PXT5TGjeN/8SX1UQ6KLNKnDCcR+GxUW62QsKsr156K5QvZZipliIlYCYh8tLeEu/
-# EMnbmFWS+Ei0VxWpBTzS5v/g3EUom8VbN1lY/6JM9HruvTVAIeDLM4d9KH5pAlWG
-# RoNF2W0bAyCajLpAWhl+znXa+T0nWEjXzATE26CgWE26CYnJKxv/sXDlFec6XKmL
-# WShqCARS8b5ICb4FVCVjtH4cI+hx//3y8cjRGmtD1NEfqdBOLppS3YJ3gB4AajZU
-# wmdI/iYTsiZZWxJhRZntWbcPMRej1o4P1LzgaC9Plkvijia3Q5jUhagiPA==
+# MRYEFDhWGOz0SEy7C2xywje12wSQFnGJMA0GCSqGSIb3DQEBAQUABIIBgIaEP7BS
+# aVKH78qe4bIZJhxFDlbLhqY9GPRmvZFtWVob1pC/PZ04UWVavMcCj+LoQTkqmMpr
+# z3wW7V/iVblj7EfJXKw5N3eRbwkMFQFhlvn+dfjNKcWZHJuVUH5MSc5OpLbQ+Kac
+# kGo60L0MoLV95rgKJe5PBF7UzZnuNZU/p52DW1CUSEeKOQigBK/YrBA/hBWFcz6M
+# /9F1db1Bd+oWYvZaX9shdigG/oYCB9LOFXSIZwTxvkuIQVcsQ7/+vanTPJp4bP+I
+# 4zqMbBsvZm6YtRUeHl5bIsPxAknGDpirsP0VxXCgkjAwSibfYQuvvVdliDj8C/qe
+# HxOEfLt2P5Gz1MZYLd47Lv5hm5D2USh1Yx8UrAAL2tBFikQkueyS3TiCzTNmzhQd
+# GOizqy7KOtAj+HeMBa2iUUmn2N5rIimNBb7LpXREZwC7MFfbS1gL5kd19pLMCffK
+# ckcbcDYGeeZiWZyFMU8e2fAQFKoHMzfaWd8wEF4Iy0Tc3vcXLJJiUA61eg==
 # SIG # End signature block

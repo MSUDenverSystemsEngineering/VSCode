@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 	This script performs the installation or uninstallation of an application(s).
 	# LICENSE #
@@ -67,12 +67,12 @@ Try {
 	## Variables: Application
 	[string]$appVendor = 'Microsoft'
 	[string]$appName = 'Visual Studio Code'
-	[string]$appVersion = '1.63.2'
+	[string]$appVersion = '1.70.0'
 	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
-	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '01/31/2022'
+	[string]$appScriptVersion = '1.0.1'
+	[string]$appScriptDate = '08/05/2022'
 	[string]$appScriptAuthor = 'Craig Myers'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
@@ -87,8 +87,8 @@ Try {
 
 	## Variables: Script
 	[string]$deployAppScriptFriendlyName = 'Deploy Application'
-	[version]$deployAppScriptVersion = [version]'3.8.3'
-	[string]$deployAppScriptDate = '30/09/2020'
+	[version]$deployAppScriptVersion = [version]'3.8.4'
+	[string]$deployAppScriptDate = '26/01/2021'
 	[hashtable]$deployAppScriptParameters = $psBoundParameters
 
 	## Variables: Environment
@@ -120,18 +120,17 @@ Try {
 		##*===============================================
 		[string]$installPhase = 'Pre-Installation'
 
-		## Show Welcome Message, close Internet Explorer if required, verify there is enough disk space to complete the install, and persist the prompt
-		Show-InstallationWelcome -CloseApps 'jamovi' -CheckDiskSpace -PersistPrompt
+		## Show Welcome Message, close Internet Explorer if required, allow up to 3 deferrals, verify there is enough disk space to complete the install, and persist the prompt
+		Show-InstallationWelcome -CloseApps 'code' -CheckDiskSpace -PersistPrompt
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
-		IF (Test-Path -Path "$envProgramFiles\Microsoft VS Code\unins000.exe"){
+		If (Test-Path -Path "$envProgramFiles\Microsoft VS Code\unins000.exe"){
 			$exitCode = Execute-Process -Path "$envProgramFiles\Microsoft VS Code\unins000.exe" -Parameters '/VERYSILENT' -WindowStyle 'Hidden'
 			If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 		}
-
 
 
 		##*===============================================
@@ -146,8 +145,11 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		$exitCode = Execute-Process -Path "$dirFiles\VSCodeSetup-x64-1.63.2.exe" -Parameters '/VERYSILENT /MERGETASKS=!runcode' -WindowStyle 'Hidden'
+		$exitCode = Execute-Process -Path "$dirFiles\VSCodeSetup-x64-1.70.0.exe" -Parameters '/VERYSILENT /MERGETASKS=!runcode' -WindowStyle 'Hidden'
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+
+
+
 		##*===============================================
 		##* POST-INSTALLATION
 		##*===============================================
@@ -155,8 +157,9 @@ Try {
 
 		## <Perform Post-Installation tasks here>
 
+
 		## Display a message at the end of the install
-		If (-not $useDefaultMsi) {}
+		If (-not $useDefaultMsi) { Show-InstallationPrompt -Message "$appName $appVersion has been successfully installed." -ButtonRightText 'OK' -Icon Information -NoWait }
 	}
 	ElseIf ($deploymentType -ieq 'Uninstall')
 	{
@@ -188,13 +191,14 @@ Try {
 		# <Perform Uninstallation tasks here>
 		$exitCode = Execute-Process -Path "$envProgramFiles\Microsoft VS Code\unins000.exe" -Parameters '/VERYSILENT' -WindowStyle 'Hidden'
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+
+
 		##*===============================================
 		##* POST-UNINSTALLATION
 		##*===============================================
 		[string]$installPhase = 'Post-Uninstallation'
 
 		## <Perform Post-Uninstallation tasks here>
-
 
 	}
 	ElseIf ($deploymentType -ieq 'Repair')
@@ -248,8 +252,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUuRxDfpk/RqYD8j64NIYahULr
-# kEygghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUVhTl76hbbZKaKeVjjS1WXn9d
+# 4fygghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -349,13 +353,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFDhWGOz0SEy7C2xywje12wSQFnGJMA0GCSqGSIb3DQEBAQUABIIBgIaEP7BS
-# aVKH78qe4bIZJhxFDlbLhqY9GPRmvZFtWVob1pC/PZ04UWVavMcCj+LoQTkqmMpr
-# z3wW7V/iVblj7EfJXKw5N3eRbwkMFQFhlvn+dfjNKcWZHJuVUH5MSc5OpLbQ+Kac
-# kGo60L0MoLV95rgKJe5PBF7UzZnuNZU/p52DW1CUSEeKOQigBK/YrBA/hBWFcz6M
-# /9F1db1Bd+oWYvZaX9shdigG/oYCB9LOFXSIZwTxvkuIQVcsQ7/+vanTPJp4bP+I
-# 4zqMbBsvZm6YtRUeHl5bIsPxAknGDpirsP0VxXCgkjAwSibfYQuvvVdliDj8C/qe
-# HxOEfLt2P5Gz1MZYLd47Lv5hm5D2USh1Yx8UrAAL2tBFikQkueyS3TiCzTNmzhQd
-# GOizqy7KOtAj+HeMBa2iUUmn2N5rIimNBb7LpXREZwC7MFfbS1gL5kd19pLMCffK
-# ckcbcDYGeeZiWZyFMU8e2fAQFKoHMzfaWd8wEF4Iy0Tc3vcXLJJiUA61eg==
+# MRYEFJdfrJM7k5uRCxeW5Fs8bvnX3J+UMA0GCSqGSIb3DQEBAQUABIIBgE1/T4iI
+# 7zCZrgYwBDtY4sbr7jsAUWomvRgBE2o3va9VRjQy6Sh1PcOVItsglhSdYG0iu3v6
+# Kqn6b12eqcDb8+mG9xKqUND6wP5x2lSFFuGkMPtJQkTeAr0r0snVBIRKGjProLbq
+# kkHJfMU2zggfN3qldAsfC3n/AEicXZb0lh0GiBp/w/eMAcrIF+WFGSptoLc/Rin+
+# sEn1T22bnXR/H0iQ+c2AjpUdm408pk90ub0ARPUxrPqBkKwupxEfUBVcVyeIS1GT
+# LptXKZebEZwN78A+VmMgUE7AZYE8FmBIwAsGcFKvtnTytSngCEiD8RP3jGqZgOpf
+# Bww2NZ8vWHYm47SoIrz38DUuZUE0L/eKj0KLwInjLtwClcmDgoa/wmuKYQTG3J4c
+# nEnSwZRJ9We2VJO14jR6vFKLD3aZLJ4tgZFYmfrKPSZxlL/a36Za9lrOo5rXnK8Z
+# KG+kMuvGAM10Jw+1g52jmriSpvv3KSY1LP0fKIcNGfuEmscrrB9i0HINvw==
 # SIG # End signature block
